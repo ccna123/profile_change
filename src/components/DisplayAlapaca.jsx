@@ -1,8 +1,8 @@
 import React from "react";
 
-export const DisplayAlapaca = ({ updateStyle, alapacaImg }) => {
+export const DisplayAlapaca = ({ updateStyle }) => {
   return (
-    <div id="profile" ref={alapacaImg}>
+    <div id="profile">
       {/* hair */}
       <img src={updateStyle[0].style} className="absolute -left-3 z-10" />
       {/* end hair */}

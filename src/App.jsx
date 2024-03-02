@@ -18,8 +18,6 @@ function App() {
   const [changeAccessory, setChangeAccessory] = useState(0);
   const [changeStyle, setChangeStyle] = useState(0);
   const [updateStyle, setUpdateStyle] = useState(accessories_style);
-  const [imageDataUrl, setImageDataUrl] = useState(null);
-  const alapacaImg = useRef(null);
 
   const handleChangeAccessory = (index) => {
     setChangeAccessory(index);
@@ -80,22 +78,17 @@ function App() {
   };
 
   return (
-    <div className="App flex justify-center items-center w-full h-screen">
-      <main className="bg-[#EEEEEE] px-8 py-3 w-[50%] h-[512px]">
-        <h1 className="uppercase font-bold text-4xl mb-10 flex justify-start">
+    <div className="App flex justify-center items-center w-full h-screen m-4">
+      <main className="bg-[#EEEEEE] px-8 py-3 lg:w-[50%]">
+        <h1 className="uppercase font-bold md:text-4xl md:my-10 flex justify-start">
           alapaca generator
         </h1>
-        <div className="grid grid-cols-2">
+        <div className="grid md:grid-cols-2">
           <div>
-            <section className="w-[80%] h-[280px] relative overflow-hidden">
-              <DisplayAlapaca
-                accessories={accessories}
-                changeAccessory={changeAccessory}
-                updateStyle={updateStyle}
-                alapacaImg={alapacaImg}
-              />
+            <section className="h-[320px] mr-4 lg:w-[80%] lg:h-[280px] relative overflow-hidden">
+              <DisplayAlapaca updateStyle={updateStyle} />
             </section>
-            <div className=" w-[80%] flex gap-4">
+            <div className=" md:w-[80%] flex gap-4">
               <div className="bg-white mt-4 w-full py-2">
                 <i className="fa-solid fa-shuffle mr-3" />
                 <button onClick={handleRandomStyle} className=" font-bold">
@@ -111,18 +104,18 @@ function App() {
             </div>
           </div>
 
-          <section>
+          <section className="my-5">
             <div>
               <p className="uppercase flex justify-start mb-4 text-sm font-bold">
                 accessorize the alapaca's
               </p>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {accessories.map((part, index) => (
                   <button
                     type="button"
                     className={` ${
                       part.name === accessories_style[changeAccessory].key
-                        ? "bg-[#00215A] text-white font-bold"
+                        ? "bg-[#00215A] text-white font-bold border-none"
                         : ""
                     } border-2 border-blue-300 rounded-3xl w-fit px-4 py-1 hover:bg-[#00215A] hover:text-white hover:font-bold`}
                     key={index}
@@ -143,7 +136,7 @@ function App() {
                     type="button"
                     className={`${
                       index === changeStyle
-                        ? "bg-[#00215A] text-white font-bold"
+                        ? "bg-[#00215A] text-white font-bold border-none"
                         : ""
                     }  border-2 border-blue-300 rounded-3xl w-fit px-4 py-1 hover:bg-[#00215A] hover:text-white hover:font-bold`}
                     key={index}
@@ -156,6 +149,9 @@ function App() {
             </div>
           </section>
         </div>
+        <p className="font-bold">Created by Thanh</p>
+        <p>{new Date().getFullYear()}</p>
+        <p>Copyright &copy;</p>
       </main>
     </div>
   );
