@@ -1,23 +1,31 @@
-FROM node:20-alpine
-
-RUN addgroup app && adduser -S -G app app
-
-USER app
-
-WORKDIR /app
-
-COPY  package*.json ./
+# Stage 1: Build the React app
+FROM cgr.dev/chainguard/node:latest AS build
 
 USER root
 
-RUN chown -R app:app
+# Set working directory
+WORKDIR /react
 
-USER app
+# Copy and install only the production dependencies
+COPY package*.json ./
+RUN npm ci --only=production
 
-RUN npm install
-
+# Copy the application source code
 COPY . .
 
-EXPOSE 8000
+# Build the application for production
+RUN npm run build
 
-CMD [ "npm", "run" "dev" ]
+# Stage 2: NGINX to serve the React app
+FROM cgr.dev/chainguard/nginx:latest
+
+USER root
+
+# Copy the built React app from the build stage
+COPY --from=build /react/build /usr/share/nginx/html
+
+# Copy custom NGINX config file
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose port 8080 instead of 80 (to avoid root privileges)
+EXPOSE 80
