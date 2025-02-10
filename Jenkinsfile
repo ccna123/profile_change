@@ -37,6 +37,7 @@ pipeline {
         stage('Deploy to S3') {
             steps {
                 script {
+                    sh 'echo $AWS_ACCESS_KEY_ID'
                     // Deploy build folder to S3
                     sh '''
                         aws s3 sync $BUILD_DIR/ s3://$AWS_S3_BUCKET/ --delete --region $AWS_REGION
