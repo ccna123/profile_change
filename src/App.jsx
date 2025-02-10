@@ -1,6 +1,6 @@
 import accessories from "./alapaca";
 import "./App.css";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { DisplayAlapaca } from "./components/DisplayAlapaca";
 import html2canvas from "html2canvas";
 
