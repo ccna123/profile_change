@@ -69,8 +69,11 @@ pipeline {
         }
         stage('Deploying React.js container to Kubernetes') {
             steps {
-                script {
-                kubernetesDeploy(configs: "deploy_k8s.yaml")
+                if (isUnix()) {
+                // Ensure kubectl is configured on the Jenkins agent
+                sh 'kubectl apply -f deploy_k8s.yaml'
+                } else {
+                    bat 'kubectl apply -f deploy_k8s.yaml'
                 }
             }
         }
