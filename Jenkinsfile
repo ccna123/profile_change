@@ -9,6 +9,7 @@ pipeline {
         DOCKER_IMAGE = 'thanh1994/profile-change-app'
         DOCKER_TAG = 'latest'
         DOCKER_CREDENTIALS = 'dockerhub-credentials'
+        KUBECONFIG_FILE = 'kubeconfig'
         dockerImage = ''
     }
 
@@ -70,11 +71,12 @@ pipeline {
         stage('Deploying React.js container to Kubernetes') {
             steps {
                 script {
-                    if (isUnix()) {
-                    // Ensure kubectl is configured on the Jenkins agent
-                    sh 'kubectl apply -f deploy_k8s.yaml'
-                    } else {
-                        bat 'kubectl apply -f deploy_k8s.yaml'
+                    withCredentials([file(credentialsId: 'k8s_credentials', variable: 'KUBECONFIG')]) {
+                        if (isUnix()) {
+                            sh 'export KUBECONFIG=$KUBECONFIG && kubectl apply -f deploy_k8s.yaml'
+                        } else {
+                            bat 'set KUBECONFIG=%KUBECONFIG% && kubectl apply -f deploy_k8s.yaml'
+                        }
                     }
                 }
             }
