@@ -2,48 +2,75 @@ pipeline {
     agent any
     
     tools {
-      nodejs 'nodejs'
+        nodejs 'nodejs'
     }
 
-    
     environment {
-        AWS_S3_BUCKET = 'caicanuoc123'
-        AWS_REGION = 'ap-northeast-1'  // Update this with your AWS region
-        BUILD_DIR = 'build'  // Default build directory for React app
+        DOCKER_IMAGE = 'thanh1994/profile-change-app'
+        DOCKER_TAG = 'latest'
+        DOCKER_CREDENTIALS = 'dockerhub-credentials'
+        dockerImage = ''
     }
 
     stages {
-        stage('check out') {
+        stage('Check Out') {
             steps {
-                git url: "https://github.com/ccna123/profile_change.git", branch: "master"
+                git url: "https://github.com/ccna123/profile_change.git", branch: "deploy_k8s"
             }
         }
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Install Node.js dependencies
-                    sh 'npm install'
+                    if (isUnix()) {
+                        sh 'npm install'
+                    } else {
+                        bat 'npm install'
+                    }
                 }
             }
         }
         stage('Build React App') {
             steps {
                 script {
-                    // Build the React app
-                    sh 'npm run build'
+                    if (isUnix()) {
+                        sh 'npm run build'
+                    } else {
+                        bat 'npm run build'
+                    }
                 }
             }
         }
-        stage('Deploy to S3') {
+        stage('Build Docker Image') {
             steps {
-                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-credentials', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 script {
-                    sh 'echo $AWS_ACCESS_KEY_ID'
-                    // Deploy build folder to S3
-                    sh '''
-                        aws s3 sync $BUILD_DIR/ s3://$AWS_S3_BUCKET/ --delete --region $AWS_REGION
-                    '''
+                    if (isUnix()) {
+                        dockerImage = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                    } else {
+                        bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                    }
                 }
+            }
+        }
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        docker.withRegistry('', DOCKER_CREDENTIALS) {
+                            dockerImage.push()
+                        }
+                    } else {
+                        withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                        bat "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    }
+                    }
+                }
+            }
+        }
+        stage('Deploying React.js container to Kubernetes') {
+            steps {
+                script {
+                kubernetesDeploy(configs: "deploy_k8s.yaml")
                 }
             }
         }

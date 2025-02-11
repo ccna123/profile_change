@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpaca-deployment
+  labels:
+    app: alpaca
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpaca
+  template:
+    metadata:
+      labels:
+        app: alpaca
+    spec:
+      containers:
+        - name: alpaca-container
+          image: thanh1994/profile-change-app
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alpaca-service
+spec:
+  selector:
+    app: alpaca
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
