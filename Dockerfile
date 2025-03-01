@@ -1,7 +1,5 @@
 # Stage 1: Build the React app
-FROM cgr.dev/chainguard/node:latest AS build
-
-USER root
+FROM node:23-bookworm-slim AS build
 
 # Set working directory
 WORKDIR /react
@@ -17,9 +15,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: NGINX to serve the React app
-FROM cgr.dev/chainguard/nginx:latest
-
-USER root
+FROM nginx:stable-alpine
 
 # Copy the built React app from the build stage
 COPY --from=build /react/build /usr/share/nginx/html
@@ -27,5 +23,6 @@ COPY --from=build /react/build /usr/share/nginx/html
 # Copy custom NGINX config file
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port 8080 instead of 80 (to avoid root privileges)
 EXPOSE 80
+# Command to start NGINX with a custom PID path
+CMD ["nginx", "-g", "daemon off;"]
