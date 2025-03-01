@@ -88,14 +88,14 @@ function App() {
             <section className="h-[420px] rounded-xl mr-4 lg:w-[80%] lg:h-[280px] relative overflow-hidden">
               <DisplayAlapaca updateStyle={updateStyle} />
             </section>
-            <div className=" md:w-[80%] flex gap-4">
-              <div className="bg-gradient-to-br from-red-400 to-[#f90926] text-white rounded-xl pl-3 hover:scale-105 hover:duration-75 mt-4 w-full py-2">
+            <div className="md:w-[80%] flex gap-4">
+              <div className="bg-gradient-to-br from-red-400 to-[#f90926] text-white rounded-xl px-4 hover:scale-105 hover:duration-75 mt-4 py-2">
                 <i className="fa-solid fa-shuffle mr-3" />
                 <button onClick={handleRandomStyle} className="font-bold">
                   Random
                 </button>
               </div>
-              <div className="bg-gradient-to-br from-orange-400 to-[#f90926] text-white rounded-xl pl-3 hover:scale-105 hover:duration-75 mt-4 w-full py-2 ">
+              <div className="bg-gradient-to-br from-orange-400 to-[#f90926] text-white rounded-xl px-4 hover:scale-105 hover:duration-75 mt-4 py-2 ">
                 <i className="fa-solid fa-download mr-3" />
                 <button onClick={handleDownload} className="font-bold">
                   Download
