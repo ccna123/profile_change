@@ -78,26 +78,26 @@ function App() {
   };
 
   return (
-    <div className="App flex justify-center items-center w-full h-screen m-4">
-      <main className="bg-[#EEEEEE] px-8 py-3 lg:w-[50%]">
+    <div className="m-4 border-2 border-red-500 mx-auto flex justify-center">
+      <main className="bg-[#EEEEEE] px-8 py-3 lg:w-[50%] rounded-2xl">
         <h1 className="uppercase font-bold md:text-4xl md:my-10 flex justify-start">
           alapaca generator
         </h1>
         <div className="grid md:grid-cols-2">
           <div>
-            <section className="h-[320px] mr-4 lg:w-[80%] lg:h-[280px] relative overflow-hidden">
+            <section className="h-[420px] rounded-xl mr-4 lg:w-[80%] lg:h-[280px] relative overflow-hidden">
               <DisplayAlapaca updateStyle={updateStyle} />
             </section>
             <div className=" md:w-[80%] flex gap-4">
-              <div className="bg-white mt-4 w-full py-2">
+              <div className="bg-white rounded-xl pl-3 hover:scale-105 hover:duration-75 mt-4 w-full py-2">
                 <i className="fa-solid fa-shuffle mr-3" />
-                <button onClick={handleRandomStyle} className=" font-bold">
+                <button onClick={handleRandomStyle} className="font-bold">
                   Random
                 </button>
               </div>
-              <div className="bg-white mt-4 w-full py-2 ">
+              <div className="bg-white rounded-xl pl-3 hover:scale-105 hover:duration-75 mt-4 w-full py-2 ">
                 <i className="fa-solid fa-download mr-3" />
-                <button onClick={handleDownload} className=" font-bold">
+                <button onClick={handleDownload} className="font-bold">
                   Download
                 </button>
               </div>
@@ -117,7 +117,7 @@ function App() {
                       part.name === accessories_style[changeAccessory].key
                         ? "bg-[#00215A] text-white font-bold border-none"
                         : ""
-                    } border-2 border-blue-300 rounded-3xl w-fit px-4 py-1 hover:bg-[#00215A] hover:text-white hover:font-bold`}
+                    } border-2 border-blue-300 rounded-3xl py-1 hover:bg-[#00215A] hover:text-white hover:font-bold`}
                     key={index}
                     onClick={() => handleChangeAccessory(index)}
                   >
@@ -149,9 +149,11 @@ function App() {
             </div>
           </section>
         </div>
-        <p className="font-bold">Created by Thanh</p>
-        <p>{new Date().getFullYear()}</p>
-        <p>Copyright &copy;</p>
+        <div className="w-fit mx-auto">
+          <p className="font-bold">Created by Thanh</p>
+          <p>{new Date().getFullYear()}</p>
+          <p>Copyright &copy;</p>
+        </div>
       </main>
     </div>
   );
